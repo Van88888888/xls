@@ -1,0 +1,16 @@
+import xlwt
+proj = ['名称','单价/元','库存/kg']
+fruit = ['苹果','梨','香蕉','橘子']
+price = [8,3.5,4.5,3.8]
+storage = [150,130,100,300]
+book = xlwt.Workbook()
+sheet = book.add_sheet('Sheet1')
+for i in range(0,len(proj)):
+    sheet.write(0,i,proj[i]) #按行插入行标题
+for i in range(0,len(fruit)):
+    sheet.write(i+1,0,fruit[i])  #插入第一列水果名称
+for i in range(0,len(price)):
+    sheet.write(i+1,1,price[i])  #插入第二列单价
+for i in range(0,len(storage)):
+    sheet.write(i+1,2,storage[i])   #插入第三列库存
+book.save('fruit2.xls')
