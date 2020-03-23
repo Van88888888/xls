@@ -1,0 +1,47 @@
+import os
+import time
+import xlrd
+import xlwt
+import re
+import csv
+
+output_dir = '/Users/mawei/Documents/Voice_recog/ALI_OSS_RECOG/output_file/0318/'
+input_dir = '/Users/mawei/Downloads/天津/'
+
+book_w = xlwt.Workbook()
+sheet_w = book_w.add_sheet('Sheet1')
+proj = ['公司', '电话', '邮箱地址']
+for i in range(0,len(proj)):
+    sheet_w.write(0, i, proj[i]) #按行插入行标题
+
+l_num = 1
+for xlsfile in os.listdir(input_dir):
+    if 'DS' in xlsfile:
+        continue
+    print("文件夹名字", xlsfile)
+    book = xlrd.open_workbook(input_dir + xlsfile)
+    sheet = book.sheet_by_index(0)
+    rows = sheet.nrows
+    col_name = sheet.col_values(0)
+    col_phone = sheet.col_values(10)
+    col_web = sheet.col_values(13)
+    col_email = sheet.col_values(14)
+
+    for i in range(len(col_name)):
+        if '@' in col_email[i]:
+            company = col_name[i]
+            phone = col_phone[i]
+            emails = col_email[i]
+            #print('emails', emails)
+            emails = emails.split(';')
+            for single_email in emails:
+                a = re.sub('\t', '', single_email)
+                print('single_email', a)
+                sheet_w.write(l_num, 0, company)
+                sheet_w.write(l_num, 1, phone)
+                sheet_w.write(l_num, 2, a)
+
+                l_num += 1
+            # print(company)
+            # print(phone)
+book_w.save(input_dir + 'email.xls')
